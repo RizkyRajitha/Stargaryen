@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-//const passport = require("passport");
 const User = require("../db/users");
 //const Candidate = require("../db/candidates");
 const ObjectID = require("mongodb").ObjectID;
@@ -8,6 +7,8 @@ const ObjectID = require("mongodb").ObjectID;
 //const emailhandler = require("../config/emailhandler");
 const path = require("path");
 //const Evaluation = require("../db/evaluation");
+const authRoutes = require("./auth.routes");
+const userRoutes = require("./user.routes");
 
 // const profileimgupload = require("./fileupload.routes");
 // const adminRoutes = require('./admin.routes')
@@ -18,136 +19,49 @@ const path = require("path");
 // 	res.sendFile(path.join(__dirname, '/../../client/build/index.html'));
 // });
 
-router.post("/reg", (req, res, next) => {
-  passport.authenticate(
-    "jwtstrategy",
-    { session: false },
-    (err, user, info) => {
-      console.log("-----in reg ------");
-      console.log(info);
+router.post("/signup", authRoutes.reg);
+router.post("/login", authRoutes.Login);
+router.get("/dashboard", userRoutes.dashboard);
 
-      if (user) {
+// router.get("/dashboard", (req, res, next) => {
+//   passport.authenticate(
+//     "jwtstrategy",
+//     { session: false },
+//     (err, user, info) => {
+//       console.log("error - " + err);
+//       console.log("user - " + user);
+//       console.log("info -- " + info);
 
-       
-
-        console.log(`************${req.headers.authorization}****************`);
-
-        const newuser = new User({
-          email: req.body.email,
-          hash: req.body.password,
-          firstName: req.body.firstname,
-          lastName: req.body.lastname,
-          usertype: req.body.usertype
-        });
-        console.log(`email - ${req.body.email}  pass - ${req.body.password}`);
-        //newuser.setpass(req.body.password);
-        console.log('>>>>><<<<<<'+user.usertype)
-
-        User.findById(ObjectID(user.id)).then((doc) => {
-          console.log(doc.usertype)
-          if(doc.usertype==='admin'){
-            newuser
-            .save()
-            .then(result => {
-              console.log("succsess");
-              //var token = result.generateJWT();
-              return res.status(200).send({});
-            })
-            .catch(err => {
-              console.log(" reg err -  " + err);
-  
-              if (err.code === 11000) {
-                console.log(" reg err duplicate email found ");
-                res.status(403).json(err.code);
-              } else {
-                res.status(403).json(err);
-              }
-            });
-          }else{
-            res.status(403).json('no_previladges');
-          }
-
-
-          
-        }).catch((err) => {
-          
-        });
-
-
-        
-
-
-      }
-    }
-  )(req, res, next);
-});
-
-router.post("/login1", function(req, res, next) {
-  passport.authenticate("local", function(err, user, info) {
-    console.log("ppppp");
-    if (err) {
-      console.log("error no user");
-      return next(err);
-    }
-    if (!user) {
-      console.log("error no1");
-      console.log(info.message);
-      return res.send(user);
-    }
-    req.logIn(user, function(err) {
-      if (err) {
-        return next(err);
-      } else {
-        console.log("done");
-        var token = user.generateJWT();
-        // res.cookie("jwt", token, { httpOnly: true, secure: true });
-        return res.status(200).send(token);
-      }
-    });
-  })(req, res, next);
-});
-
-router.get("/dashboard", (req, res, next) => {
-  passport.authenticate(
-    "jwtstrategy",
-    { session: false },
-    (err, user, info) => {
-      console.log("error - " + err);
-      console.log("user - " + user);
-      console.log("info -- " + info);
-
-      if (!user) {
-        res.status(401).send(info);
-      } else {
-        User.findById(ObjectID(user.id))
-          .then(result => {
-            const senddata = {
-              id: result._id,
-              email: result.email,
-              emailverified: result.emailverified,
-              firstName: result.firstName,
-              lastName: result.lastName,
-              usertype:result.usertype
-            };
-            console.log(senddata);
-            res.status(200).json(senddata);
-          })
-          .catch(err => {
-            res.status(403).json(err);
-          });
-      }
-    }
-  )(req, res, next);
-});
-
+//       if (!user) {
+//         res.status(401).send(info);
+//       } else {
+//         User.findById(ObjectID(user.id))
+//           .then(result => {
+//             const senddata = {
+//               id: result._id,
+//               email: result.email,
+//               emailverified: result.emailverified,
+//               firstName: result.firstName,
+//               lastName: result.lastName,
+//               usertype:result.usertype
+//             };
+//             console.log(senddata);
+//             res.status(200).json(senddata);
+//           })
+//           .catch(err => {
+//             res.status(403).json(err);
+//           });
+//       }
+//     }
+//   )(req, res, next);
+// });
 
 router.post("/sendconfirmemail/:id", (req, res) => {
   console.log(req.params.id);
 
-
   User.findById(ObjectID(req.params.id))
     .then(doc => {
-      console.log('tryna sent')
+      console.log("tryna sent");
       emailhandler.mailhandleremailconfirm(doc.email, doc._id);
       res.status(200).send("email sent");
     })
@@ -187,11 +101,10 @@ router.post("/fogotpassword", (req, res) => {
       }
     })
     .catch(err => {
-      console.log("error - - - "+err);
+      console.log("error - - - " + err);
       res.send("no_user_found");
     });
 });
-
 
 router.get("/getcandidate", (req, res) => {
   console.log("hiiii");
@@ -217,8 +130,6 @@ router.get("/getcandidate", (req, res) => {
   //   });
 });
 
-
-
 router.get("/test", (req, res) => {
   // var ada = new Date();
   // console.log(ada);
@@ -236,35 +147,28 @@ router.get("/test", (req, res) => {
   //     res.json(err);
   //   });
 
-can = ['aa','bb']
+  can = ["aa", "bb"];
 
   User.findOneAndUpdate(
-    { _id: ObjectID('5ca98a6200d8ab4264d7dffc') },
+    { _id: ObjectID("5ca98a6200d8ab4264d7dffc") },
     {
       $set: {
-        assinngedCandidates:can
+        assinngedCandidates: can
       }
     }
-  ).then(result=>{
-    console.log(result)
-    res.send(result)
-  }).catch(err=>{
-console.log(err)
-  })
-
-
-
-
+  )
+    .then(result => {
+      console.log(result);
+      res.send(result);
+    })
+    .catch(err => {
+      console.log(err);
+    });
 });
 
 // router.post("/avatar/:id", profileimgupload.profileimgup);
 // router.post("/cv/:id", profileimgupload.cvupload);
 // router.post('/adminlogin',adminRoutes.adminLogin)
 // router.get("/userdata",adminRoutes.userlist)
-
-
-
-
-
 
 module.exports = router;

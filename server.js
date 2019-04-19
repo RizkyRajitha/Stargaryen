@@ -17,8 +17,10 @@ app.use(bp.json());
 
 //const uu = require("./routes/userroute");
 
-app.use("/usr", require("./routes/routes"));
-
+app.use("/api", require("./routes/routes"));
+// app.get('/',(req,res)=>{
+//   res.send('works')
+// })
 
 app.use(express.static("client/build"));
 
