@@ -6,7 +6,6 @@ const Navbar = props => {
   const logoutHandler = e => {
     console.log("loggeeeeeeee");
     localStorage.removeItem("jwt");
-
     props.history.push("/login");
   };
 
@@ -14,7 +13,7 @@ const Navbar = props => {
     <nav>
       <div id="nav" className="nav-wrapper grey darken-3">
         <a href="/" id="navlogo" class="brand-logo left">
-          Rect@Aux
+          FCiD
         </a>
 
         <ul id="nav-mobile" class="right hide-on-med-and-down ">
