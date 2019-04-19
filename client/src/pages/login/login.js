@@ -83,7 +83,10 @@ class login extends Component {
       // }
 
       axios
-        .post("http://localhost:3001/api/login", {"email":this.state.email,"password": this.state.password})
+        .post("/api/login", {
+          email: this.state.email,
+          password: this.state.password
+        })
         .then(data => {
           console.log("awe mewwa - - -popopopopo");
           console.log(data);
@@ -110,32 +113,6 @@ class login extends Component {
             showNullError: false
           });
         });
-
-      // axios.post("/usr/login1", params, (err, res, body) => {
-      //   console.log("errr - " + err);
-      //   console.log("response - " + res);
-      //   console.log("body - " + body);
-
-      //   if (body !== "false") {
-      // console.log("body - " + body);
-      // localStorage.setItem("jwt", body);
-
-      // this.setState({
-      //   loggedIn: true,
-      //   showError: false,
-      //   showNullError: false
-      // });
-      //   } else {
-      //     console.log(err);
-      // this.setState({
-      //   loggedIn: false,
-      //   showError: true,
-      //   showNullError: false
-      // });
-      //   }
-
-      //   // this.setState({ email: data.email, id: data.id });
-      // });
     }
   };
 
@@ -147,7 +124,9 @@ class login extends Component {
         <div className="maindiv">
           <div className="wrapper">
             <div className="form-wrapper">
-              <div>
+              <h1>FCiD</h1>
+
+              <div className="informm">
                 {/* <Alert color="danger">reset link set to your email</Alert>
                 <br />
                 <Alert color="primary">
@@ -158,9 +137,8 @@ class login extends Component {
                   . Give it a click if you like.
                 </Alert> */}
 
-                {/* <div className="row">
-                  <div className="col-sm" />
-                  <div className="col-sm"> */}
+                <br />
+
                 {this.state.creaderror && (
                   <div class="alert alert-danger" role="alert">
                     Invalid Creadentials
@@ -170,29 +148,32 @@ class login extends Component {
                   <br />
                   <br />
                   <br />
-                  <div className="form-group">
-                    {/* <label> enter email </label> */}
+
+                  {/* <div class="input-field">
+          <input id="last_name" type="text" />
+          <label for="last_name">Last Name</label>
+        </div> */}
+
+                  <div className="input-field">
                     <input
-                      id="uname"
+                      id="email"
                       required
-                      type="text"
-                      name="uname"
-                      className="form-control"
+                      type="email"
+                      name="email"
                       onChange={this.changehandleremail}
-                      placeholder="enter email"
                     />
+                    <label for="email">Email</label>
                   </div>
-                  <div className="form-group">
+                  <div className="input-field">
                     {/* <label> enter password </label> */}
                     <input
                       required
                       id="pass"
                       type="password"
                       name="pass"
-                      className="form-control"
-                      placeholder="enter password"
                       onChange={this.changehandlerpass}
                     />
+                    <label for="pass">Password</label>
                   </div>
                   <div className="submit">
                     <input
@@ -210,6 +191,13 @@ class login extends Component {
                   <Link to="/fogotpassword">
                     <a>Forgotten password</a>
                   </Link>
+                  <br />
+                </div>
+                <div className="haveaccc">
+                  still dont have a account
+                  <Link to="/signup">
+                    <span> </span> <a>signup</a>
+                  </Link>
                 </div>
 
                 {showNullError && (
@@ -224,9 +212,6 @@ class login extends Component {
                   </div>
                 )}
               </div>
-              <div className="col-sm" />
-              {/* </div>
-              </div>*/}
             </div>
           </div>
         </div>

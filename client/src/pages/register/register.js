@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import jsonwebtoken from "jsonwebtoken";
-import { Redirect } from "react-router-dom";
-import Navbar from '../../components/navbarloogedin'
+import { Redirect, Link } from "react-router-dom";
 import axios from "axios";
+import "./register.css";
 
 class Register extends Component {
   state = {
@@ -12,10 +12,8 @@ class Register extends Component {
     password2: "",
     firstname: "",
     lastname: "",
-    usertype:"",
-    errorpassmatch:false,
-    duplicateemalifound:false,
-    noPrev:false
+    errorpassmatch: false,
+    duplicateemalifound: false
   };
 
   changeHandler = e => {
@@ -23,45 +21,23 @@ class Register extends Component {
       [e.target.id]: e.target.value
     });
 
-    console.log(this.state)
+    console.log(this.state);
   };
-
-  // changeHandlerPassword = e => {
-  //   console.log(
-  //     `ps1 ${this.state}  ps2 ${e.target.value} +++ ${this.state.passsword !=
-  //       e.target.value}`
-  //   );
-
-  //   if (this.state.passsword !== String(e.target.value).trim) {
-  //     console.log(
-  //       "no match " + this.state.password + "  " + e.target.value + "-"
-  //     );
-  //     document.querySelector(".psscheck").innerHTML = "password dont match ";
-  //   } else {
-  //     // this.setState({
-  //     //   password2: e.target.value
-  //     // });
-  //     console.log("match");
-  //     document.querySelector(".psscheck").innerHTML = "password  match ";
-  //   }
-  // };
 
   componentDidMount() {
     const jwt = localStorage.getItem("jwt");
-    console.log('jwt token -- - -- >>>'+jwt);
+    console.log("jwt token -- - -- >>>" + jwt);
 
     try {
       console.log("in register");
       var pay = jsonwebtoken.verify(jwt, "authdemo");
-      console.log('payload - '+pay);
-      console.log('************************************' )
-
-      
+      console.log("payload - " + pay);
+      console.log("************************************");
+      this.props.history.push("/dashboard");
     } catch (error) {
       console.log("not logged in redirecting...............");
 
       //e.preventDefault();
-      this.props.history.push("/Login");
     }
   }
 
@@ -75,186 +51,153 @@ class Register extends Component {
       headers: { authorization: jwt }
     };
 
-    const passmatch = this.state.password1===this.state.password2
-    
+    const passmatch = this.state.password1 === this.state.password2;
 
-    console.log(passmatch)
+    console.log(passmatch);
 
-    if(passmatch){
+    if (passmatch) {
       this.setState({
-        errorpassmatch:false
-        })
-      axios
-      .post(
-        "/usr/reg",
-        {
-          email: this.state.email,
-          password: this.state.password1,
-          firstname: this.state.firstname,
-          lastname: this.state.lastname,
-          usertype:this.state.usertype
-        },
-        config
-      )
-      .then(response => {
-        console.log("resonse came - -");
-        console.log(response.data);
-        this.setState({ registered: true });
-        //localStorage.setItem("jwt", response.data);
-      })
-      .catch(err => {
-        console.log(err);
-        console.log(err.response.data==11000);
-
-        if(err.response.data==11000){
-            this.setState({duplicateemalifound:true})
-            document.querySelectorAll('.form-group').value=''
-        }
-
-        if(err.response.data=='no_previladges'){
-          this.setState({noPrev:true})
-
-          setTimeout(()=>{
-            this.props.history.push("/dashboard");
-          },5000)
-
-          //document.querySelectorAll('.form-group').value=''
-      }
-        //if(err)
+        errorpassmatch: false
       });
-    }
-    else{
+      axios
+        .post(
+          "/api/signup",
+          {
+            email: this.state.email,
+            password: this.state.password1,
+            firstname: this.state.firstname,
+            lastname: this.state.lastname
+          },
+          config
+        )
+        .then(response => {
+          console.log("resonse came - -");
+          console.log(response.data);
+          this.setState({ registered: true });
+          localStorage.setItem("jwt", response.data.jwt);
+        })
+        .catch(err => {
+          console.log(err);
+          console.log(err.response.data == 11000);
 
-      this.setState({ errorpassmatch:true })
-    }
+          if (err.response.data == 11000) {
+            this.setState({ duplicateemalifound: true });
+          }
 
-   
+        
+        });
+    } else {
+      this.setState({ errorpassmatch: true });
+    }
   };
 
-  chngehandlsel =e=>{
-
-    this.setState({usertype:e.target.value})
-
-  }
+  chngehandlsel = e => {
+    this.setState({ usertype: e.target.value });
+  };
 
   render() {
     if (this.state.registered === false) {
       return (
-        <div >
-        <Navbar/>
-          <div class="row">
-            <div class="col-sm" />
-            <div class="col-sm">
-              <form onSubmit={this.submitHandler}>
-                
-                <br></br>
-                <br></br>
+        <div>
+          <div className="maindiv">
+            <div className="wrapper">
+              <div className="form-wrapper">
+                <h1>FCiD</h1>
 
-                {this.state.errorpassmatch && (<div class="alert alert-warning" role="alert">
-  password does not match
-</div>)}
-{this.state.duplicateemalifound && (<div class="alert alert-warning" role="alert">
-Duplicate email Found
-</div>)}
-{this.state.noPrev && (<div class="alert alert-warning" role="alert">
-You have no Previladges to add new users, please contact your Administrator
-</div>)}
-                <div class="form-group">
-                  <input
-                    required
-                    type="email"
-                    className="form-control"
-                    id="email"
-                    onChange={this.changeHandler}
-                    placeholder="enter email"
-                  />
+                <div className="informmm">
+                  <form onSubmit={this.submitHandler}>
+                    {this.state.errorpassmatch && (
+                      <div class="alert alert-warning" role="alert">
+                        password does not match
+                      </div>
+                    )}
+                    {this.state.duplicateemalifound && (
+                      <div class="alert alert-warning" role="alert">
+                        Duplicate email Found
+                      </div>
+                    )}
+
+
+
+                  <div className="input-field">
+                      <input
+                        required
+                        type="email"
+                        
+                        id="email"
+                        onChange={this.changeHandler}
+                        
+                      />
+                       <label for="email">Email</label>
+                    </div>
+
+                    <div className="input-field">
+                      <input
+                        required
+                        type="text"
+                        
+                        id="firstname"
+                        onChange={this.changeHandler}
+                        
+                      />  <label for="firstname">Firstname</label>
+                    </div>
+
+                    <div className="input-field">
+                      <input
+                        required
+                        type="text"
+                       
+                        id="lastname"
+                        onChange={this.changeHandler}
+                        
+                      /><label for="lastname">Lastname</label>
+                    </div>
+
+                    <div className="input-field">
+                      <input
+                        required
+                        type="password"
+                        id="password1"
+                        
+                        onChange={this.changeHandler}
+                      /><label for="password1">Password</label>
+                    </div>
+
+                    <div className="input-field">
+                      <input
+                        required
+                        type="password"
+                        
+                        id="password2"
+                        
+                        onChange={this.changeHandler}
+                      /><label for="password2">Confirm Password</label>
+                    </div>
+
+                    <div class="form-group" />
+
+                    <input
+                      type="submit"
+                      class="btn btn-primary"
+                      value="Sign Up"
+                      id="submitbtn"
+                    />
+                  </form>
+                  <div className='haveacc'>
+                    Have an account?
+                    <Link to="/login">
+                      <span> </span> <a>login</a>
+                    </Link>
+                  </div>
+                  {/* <div className='bcktologin'>
+                    Back to Login
+                    <Link to="/login">
+                      <span> </span> <a>login</a>
+                    </Link>
+                  </div> */}
                 </div>
-
-                <div class="form-group">
-                  <input
-                    required
-                    type="text"
-                    className="form-control"
-                    id="firstname"
-                    onChange={this.changeHandler}
-                    placeholder="enter firstname"
-                  />
-                </div>
-
-                <div class="form-group">
-                  <input
-                    required
-                    type="text"
-                    className="form-control"
-                    id="lastname"
-                    onChange={this.changeHandler}
-                    placeholder="enter lastname"
-                  />
-                </div>
-
-                <div class="form-group">
-                  
-                  <input
-                    required
-                    type="password"
-                    id="password1"
-                    placeholder="enter password"
-                    className="form-control"
-                    onChange={this.changeHandler}
-                  />
-                </div>
-
-                <div class="form-group">
-                  
-                  <input
-                    required
-                    type="password"
-                    className="form-control"
-                    id="password2"
-                    placeholder="re enter password"
-                    onChange={this.changeHandler}
-                  />
-                </div>
-
-                <div class="form-group">
-            <label for="exampleFormControlSelect2">
-              select user type
-            </label>
-            <select
-              class="form-control"
-              id="status"
-              onChange={this.chngehandlsel}
-            >
-              <option selected>Select...</option>
-              <option id="status" value="hr_staff">
-                HR staff
-              </option>
-              <option id="status" value="depthead">
-                Department head
-              </option>
-              <option id="status" value="admin">
-                Admin
-              </option>
-              
-            </select>
-          </div>
-
-
-                {/* <div class="form-group">
-                  <label>re enter password</label>
-                  <input
-                    type="password"
-                    id="password2"
-                    placeholder="enter password again"
-                    onChange={this.changeHandlerPassword}
-                    className="form-control"
-                  />
-                  <label className="psscheck" />
-                </div> */}
-                <input type="submit" class="btn btn-primary" value="Add User" />
-              </form>
+              </div>
             </div>
-            <div class="col-sm" />
           </div>
         </div>
       );

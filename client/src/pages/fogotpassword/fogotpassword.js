@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
+import './forgotpassword.css'
 
 // import { Alert } from 'reactstrap';
 
@@ -46,44 +47,51 @@ class fogotpassword extends Component {
         </div>
       );
     } else if (this.state.succsee) {
-        // return (
-        //   <Alert color="primary" role="alert">
-        //     {" "}
-        //     <br />
-        //     <h1> reset link set to your email </h1>
-        //   </Alert>
-        // );
+      // return (
+      //   <Alert color="primary" role="alert">
+      //     {" "}
+      //     <br />
+      //     <h1> reset link set to your email </h1>
+      //   </Alert>
+      // );
     } else {
       return (
-        <div>
-          <h1>we all forget and that's cool </h1>
-   
-          <h1> just enter your registered email</h1>
-          <div className="container">
-            <div className="row">
-              <div className="col-sm" />
-              <div className="col-sm">
-                <form onSubmit={this.btn1handler}>
-                  <div className="form-group">
-                    <input
-                      required
-                      type="email"
-                      name="email"
-                      id="email"
-                      placeholder="enter your email "
-                      className="form-control"
-                      onChange={this.changeHandler}
-                    />
-                  </div>
-                  <input
-                    type="submit"
-                    className="btn btn-primary"
-                    value="verifiy"
-                  />
-                </form>
-              </div>
-              <div className="col-sm" />
-            </div>
+        <div className='maindiv'>
+          
+          <div className="wrapper">
+          
+          <div className='informforgot'>
+
+        <div className='forgotfrm'>
+        
+        
+        <i  id='padlock'  class="fas fa-lock fa-5x"></i>
+          <h3>we all forget and that's cool </h3>
+
+<h5> Enter your email and we'll send<br></br>
+   you a link to get back into your account.</h5>
+  <form onSubmit={this.btn1handler}>
+    <div className="form-group">
+      <input
+        required
+        type="email"
+        name="email"
+        id="email"
+        placeholder="enter your email "
+        className="form-control"
+        onChange={this.changeHandler}
+      />
+    </div>
+    <input
+      type="submit"
+      className="btn btn-primary"
+      value="verifiy"
+      id='submitbtn'
+    />
+  </form>
+</div>
+
+          </div>
           </div>
         </div>
       );

@@ -25,7 +25,7 @@ const Navbar = props => {
             <a href="/login">Login</a>
           </li>
           <li>
-            <a href="/register">register</a>
+            <a href="/signup">register</a>
           </li>
           <li>
             <a onClick={logoutHandler}>logout</a>
