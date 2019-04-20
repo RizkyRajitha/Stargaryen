@@ -3,9 +3,12 @@ import { withRouter } from "react-router-dom";
 import "./candidatecard.css";
 
 class CandidateCard extends Component {
-  cnadidateview = () => {
-    console.log(this.props);
-    this.props.history.push("/getcandidate/" + this.props._id);
+  upvote = () => {
+    console.log("up");
+  };
+
+  downvote = () => {
+    console.log("down");
   };
 
   render() {
@@ -21,37 +24,37 @@ class CandidateCard extends Component {
     //   .replace(/-/g, "/");
 
     return (
-      <div>
-        <div id='cancard' class="card center bg-light mb-3 w-75">
-
-      <input id='checkbox' type='checkbox'>
-
-      </input>
-
-        <h1 className="badge">
-              <span class="badge badge-pill badge-danger">{this.props.status}</span>
-            </h1>
-          <div class="card-body">
-            
-            <h4 class="card-title">{this.props.name}</h4>
-            <div>
-              <h3 className="divecancard" > {d} </h3>
-              <br />
+      <div className="postcard">
+        <div>
+          <h2 class="header">{this.props.name}</h2>
+          <div class="card horizontal">
+            <div class="card-image">
+              <img src="https://lorempixel.com/100/190/nature/6" />
             </div>
-            <p class="card-text">
-
-
-              <ul className="list-group" >
-                <li  className="list-group-item active" >job spechification :{this.props.jobspec}</li>
-                <li  className="list-group-item" >email :{this.props.email} </li>
-              </ul>
-            </p>
-            <input
-              type="button"
-              value="view"
-              className="btn btn-primary"
-              onClick={this.cnadidateview}
-            />
+            <div class="card-stacked">
+              <div class="card-content">
+                <p>
+                  I am a very simple card. I am good at containing small bits of
+                  information.
+                </p>
+              </div>
+              <div className="votes">
+                <a >
+                  <i
+                    onClick={this.upvote}
+                    id="up"
+                    class="far fa-thumbs-up fa-2x"
+                  />
+                </a>
+                <a >
+                  <i
+                    onClick={this.downvote}
+                    id="down"
+                    class="far fa-thumbs-down fa-2x"
+                  />
+                </a>
+              </div>
+            </div>
           </div>
         </div>
       </div>

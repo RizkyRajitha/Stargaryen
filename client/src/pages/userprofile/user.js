@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import Navbar from "../../components/navbarloogedin";
 import axios from "axios";
 import jsonwebtoken from "jsonwebtoken";
 import "./user.css";
@@ -106,7 +105,7 @@ class Userprofile extends Component {
   render() {
     return (
       <div>
-        <Navbar />
+        
         <div className="maindivuser">
           <div className="row">
             <div className="col-sm" />

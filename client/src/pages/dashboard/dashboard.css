@@ -1,4 +1,4 @@
-#userprofile{
+/* #userprofile{
     position: absolute;
     top: 20%;
     left:90%;
@@ -42,9 +42,7 @@
     
 }
 
-.greet{
-    color: #    ;
-}
+
 
 #verifyemail{
     background-color: #e53935;
@@ -52,4 +50,12 @@
 }
 #verifyemailbtn{
     background-color: #e53935;
+} */
+
+.maindash{
+    text-align: center;
+}
+
+.greet{
+    text-align: center;
 }

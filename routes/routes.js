@@ -22,6 +22,7 @@ const userRoutes = require("./user.routes");
 router.post("/signup", authRoutes.reg);
 router.post("/login", authRoutes.Login);
 router.get("/dashboard", userRoutes.dashboard);
+router.post('/addpost',userRoutes.addpost);
 
 // router.get("/dashboard", (req, res, next) => {
 //   passport.authenticate(

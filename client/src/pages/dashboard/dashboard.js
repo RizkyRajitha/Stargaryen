@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import CandidateCard from "../../components/CandidateCard";
-import UserCard from '../../components/usercard'
+import UserCard from "../../components/usercard";
 import "./dashboard.css";
 import Navbar from "../../components/navbar_metcss";
 import axios from "axios";
@@ -19,9 +19,7 @@ class dashboard extends Component {
     lastName: "",
     greet: "",
     usertype: "",
-    emailverified: false,
-    candidatedata: [],
-    userdata: []
+    emailverified: false
   };
 
   verifyemail = () => {
@@ -51,21 +49,10 @@ class dashboard extends Component {
     }
   };
 
-  reg = e => {
-    e.preventDefault();
-    this.props.history.push("/register");
-  };
-
   usrprofile = e => {
     e.preventDefault();
     this.props.history.push("/user/" + this.state.id);
   };
-
-  addcandidate = e => {
-    e.preventDefault();
-    this.props.history.push("/addcandidate");
-  };
-
 
   componentDidMount() {
     this.greet();
@@ -100,17 +87,16 @@ class dashboard extends Component {
           this.setState({
             email: result.data.email,
             emailverified: result.data.emailverified,
-            id: result.data.id,
+            id: result.data._id,
             firstName: result.data.firstName,
             lastName: result.data.lastName,
             usertype: result.data.usertype
           });
 
           this.setState({ logedin: true });
-          //console.log(this.state);
-          
-          
-          localStorage.setItem("userId", result.data.id);
+          console.log(this.state);
+
+          localStorage.setItem("userId", result.data._id);
         } else {
           this.setState({ logedin: false });
         }
@@ -130,80 +116,21 @@ class dashboard extends Component {
       var cndetailes = this.state.candidatedata;
       var usrdetails = this.state.userdata;
       return (
-        <div className="dashboardmain">
+        <div>
           <Navbar />
-          <h1 className="greet">
-            {this.state.greet} {this.state.firstName}
-          </h1>
-          <br />
-          <br />
-          <button
-            onClick={this.usrprofile}
-            className="btn btn-info"
-            id="userprofile"
-          >
-            edit profile
-          </button>
-          <br />
-          <br />
-
-          <button
-            onClick={this.addcandidate}
-            className="btn btn-info"
-            id="addcan"
-          >
-            Add new candidate
-          </button>
-
-          {!this.state.emailverified && (
-            <div className="row">
-              <div id="verifyemail" className="col-s12-m12-l12">
-                please verify your email
-                <br />
-                <button
-                  type="button"
-                  class="btn "
-                  id="verifyemailbtn"
-                  onClick={this.verifyemail}
-                >
-                  verify email
-                </button>
-              </div>
-            </div>
-          )}
-
           <div class="row">
-            <div class="col-s4-m4-l4" id="cardcontainer1">
-              {usrdetails.reverse().map((can) => {
-                //console.log(can.name+can.email+can.jobspec)
-                return (
-                  <UserCard
-                    name={can.firstName+ ' '+can.lastName}
-                    pendingcan={can.candidatesAssinged}
-                  />
-                );
-              })}
+          
+            <div className='maindash' />
+            <div className='container'>
+            <div className='greet'>
+            <h1>hello</h1>
             </div>
 
-            <div class="col-s8 " id="cardcontainer2">
-              {cndetailes.map((can, iid) => {
-                //console.log(can.name+can.email+can.jobspec)
-                return (
-                  <CandidateCard
-                    name={can.name}
-                    email={can.email}
-                    jobspec={can.jobspec}
-                    _id={can._id}
-                    date={can.date}
-                    status={can.status}
-                  />
-                );
-              })}
+            <CandidateCard name = 'rajitha'/>
+            
             </div>
+            
           </div>
-
-          <br />
-          <br />
         </div>
       );
     } else {

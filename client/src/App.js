@@ -10,7 +10,6 @@ import React, { Component } from "react";
 import Login from "./pages/login/login";
 import Register from "./pages/register/register";
 import Dashboard from "./pages/dashboard/dashboard";
-// import Navbar from "./components/navbar_metcss";
 import fogotpassword from "./pages/fogotpassword/fogotpassword";
 import resetpassword from "./pages/resetpassword/resetpassword";
 import emailconfirm from "./pages/emailverify/emailverify";
