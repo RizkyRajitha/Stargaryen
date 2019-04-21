@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { Redirect, Link } from "react-router-dom";
 import "./login.css";
-// import M from "materialize-css";
-import Navbar from "../../components/navbar_metcss";
+import M from "materialize-css";
+//import Navbar from "../../components/navbar_metcss";
 
 // import { Alert } from "reactstrap";
 
@@ -74,14 +74,6 @@ class login extends Component {
       console.log("sending..............");
       console.log(this.state.email + this.state.password);
 
-      var params = new URLSearchParams();
-      params.append("email", this.state.email);
-      params.append("password", this.state.password);
-      // data: {
-      //   email: this.state.email,
-      //   password: this.state.password
-      // }
-
       axios
         .post("/api/login", {
           email: this.state.email,
@@ -106,11 +98,13 @@ class login extends Component {
           }
         })
         .catch(err => {
-          console.log(err);
+          M.toast({ html: "Invalid Credentials" });
+          console.log("l>> err" + err);
           this.setState({
             loggedIn: false,
             showError: true,
-            showNullError: false
+            showNullError: false,
+            creaderror: true
           });
         });
     }
@@ -127,32 +121,12 @@ class login extends Component {
               <h1>FCiD</h1>
 
               <div className="informm">
-                {/* <Alert color="danger">reset link set to your email</Alert>
-                <br />
-                <Alert color="primary">
-                  This is a primary alert with{" "}
-                  <a href="#" className="alert-link">
-                    an example link
-                  </a>
-                  . Give it a click if you like.
-                </Alert> */}
-
                 <br />
 
-                {this.state.creaderror && (
-                  <div class="alert alert-danger" role="alert">
-                    Invalid Creadentials
-                  </div>
-                )}
                 <form onSubmit={this.btn1handler}>
                   <br />
                   <br />
                   <br />
-
-                  {/* <div class="input-field">
-          <input id="last_name" type="text" />
-          <label for="last_name">Last Name</label>
-        </div> */}
 
                   <div className="input-field">
                     <input
@@ -165,7 +139,6 @@ class login extends Component {
                     <label for="email">Email</label>
                   </div>
                   <div className="input-field">
-                    {/* <label> enter password </label> */}
                     <input
                       required
                       id="pass"
@@ -184,6 +157,11 @@ class login extends Component {
                     />
                   </div>
                 </form>
+                {this.state.creaderror && (
+                  <div className="container">
+                    <div className="credeer">Invalid Creadentials</div>
+                  </div>
+                )}
                 <br />
                 <br />
 
@@ -199,18 +177,6 @@ class login extends Component {
                     <span> </span> <a>signup</a>
                   </Link>
                 </div>
-
-                {showNullError && (
-                  <div>
-                    <p>The username or password cannot be null.</p>
-                  </div>
-                )}
-
-                {showError && (
-                  <div>
-                    <p>The username or password is incorrect dude XD.</p>
-                  </div>
-                )}
               </div>
             </div>
           </div>

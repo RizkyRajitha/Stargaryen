@@ -8,7 +8,16 @@ exports.dashboard = (req, res) => {
   User.getUserByToken(req.headers.authorization)
     .then(doc => {
       console.log(doc);
-      res.send(doc);
+      //res.send(doc);
+      if (doc) {
+        Posts.find().then(data => {
+          doc.hash = null;
+
+          res.status(200).json(doc);
+        });
+      } else {
+        res.status(401).send("err_no_user");
+      }
     })
     .catch(err => {
       console.log(err);
@@ -17,10 +26,9 @@ exports.dashboard = (req, res) => {
 };
 
 exports.addpost = (req, res) => {
-  //console.log(`************${req.headers.authorization}****************`);
-  //var time = moment().toDate().getTime();
-
   console.log("in add post");
+
+  console.log(req.body);
 
   User.getUserByToken(req.headers.authorization)
     .then(doc => {
@@ -29,7 +37,8 @@ exports.addpost = (req, res) => {
       var newpost = new Posts({
         firstName: req.body.firstName,
         content: req.body.content,
-        date: new Date()
+        date: new Date(),
+        postid:1222
       });
 
       newpost
@@ -38,6 +47,7 @@ exports.addpost = (req, res) => {
           res.status(200).send(data);
         })
         .catch(err => {
+          console.log(err)
           res.status(400).send(err);
         });
     })

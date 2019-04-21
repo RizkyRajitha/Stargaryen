@@ -4,6 +4,8 @@ import { Redirect, Link } from "react-router-dom";
 import axios from "axios";
 import "./register.css";
 
+import M from "materialize-css";
+
 class Register extends Component {
   state = {
     email: "",
@@ -81,6 +83,9 @@ class Register extends Component {
           console.log(err.response.data == 11000);
 
           if (err.response.data == 11000) {
+
+            //M.toast({ html: "Invalid Credentials" });
+            //M.toast({html:"Duplicate account found registerd to this email"})
             this.setState({ duplicateemalifound: true });
           }
 

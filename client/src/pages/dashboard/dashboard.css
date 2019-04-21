@@ -59,3 +59,14 @@
 .greet{
     text-align: center;
 }
+
+#addbtn{
+
+    margin-left: 80%;
+    margin-top: 30px;
+    color : #3897f0;
+}
+
+#textarea1{
+    height: 80px;
+}

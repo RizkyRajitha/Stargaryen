@@ -27,7 +27,7 @@
   background-color: #ffffff;
 }
 
-.informm{
+.informm {
   margin-top: -50px;
 }
 
@@ -44,14 +44,14 @@
 }
 #toast-container {
   /* top: auto !important; */
-  top: 10% !important;
-  right: 50% !important;
-  text-align: center !important;
+  /* top: 10% !important;
+  right: 40% !important; */
+  /* text-align: center !important; */
 
-  /* transform: translateX(50%) translateY(50%); */
-  /* right: auto !important;
+  /* transform: translateX(50%) translateY(50%);
+  right: auto !important;
   bottom: 10%;
-  left:7%;   */
+  left: 7%; */
 }
 
 ::placeholder {
@@ -59,7 +59,15 @@
   color: #666666;
   opacity: 1; /* Firefox */
 }
-.haveaccc{
- margin-top:20px;
+.haveaccc {
+  margin-top: 20px;
+}
+
+.credeer{
+margin-top: 20px;
+  text-align: center;
+  font-size: 30px;
+  color: #ef5350;
+
 
 }

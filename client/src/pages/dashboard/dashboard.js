@@ -5,10 +5,27 @@ import UserCard from "../../components/usercard";
 import "./dashboard.css";
 import Navbar from "../../components/navbar_metcss";
 import axios from "axios";
+import Modal from "react-modal";
+import M from "materialize-css";
 const jsonwebtoken = require("jsonwebtoken");
+
+const customStyles = {
+  content: {
+    width: "50%",
+    height: "50%",
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "auto",
+    marginRight: "-50%",
+    transform: "translate(-50%, -50%)"
+  }
+};
 
 //import { CandidateCard } from "./CandidateCard";
 // const request = require("request");
+
+Modal.setAppElement("#root");
 
 class dashboard extends Component {
   state = {
@@ -17,9 +34,27 @@ class dashboard extends Component {
     id: "",
     firstName: "",
     lastName: "",
-    greet: "",
+    content: "",
     usertype: "",
-    emailverified: false
+    emailverified: false,
+    modalIsOpen: false
+  };
+
+  openModal = () => {
+    this.setState({ modalIsOpen: true });
+  };
+
+  changeHandlercontent = e => {
+    this.setState({ content: e.target.value });
+  };
+
+  afterOpenModal = () => {
+    // references are now sync'd and can be accessed.
+    this.subtitle.style.color = "#f00";
+  };
+
+  closeModal = () => {
+    this.setState({ modalIsOpen: false });
   };
 
   verifyemail = () => {
@@ -32,6 +67,10 @@ class dashboard extends Component {
       .catch(err => {
         console.log(err);
       });
+  };
+
+  addpost = () => {
+    console.log("add");
   };
 
   greet = () => {
@@ -49,9 +88,34 @@ class dashboard extends Component {
     }
   };
 
-  usrprofile = e => {
+  addpost = e => {
     e.preventDefault();
-    this.props.history.push("/user/" + this.state.id);
+    console.log(this.state);
+
+    var jwt = localStorage.getItem("jwt");
+    console.log(jwt);
+
+    var config = {
+      headers: { authorization: jwt }
+    };
+
+    var senddata = {
+      firstName: this.state.firstName,
+      content: this.state.content
+    };
+
+    axios
+      .post("/api/addpost", senddata, config)
+      .then(res => {
+        console.log(res);
+        M.toast({ html: "Posted.." });
+      })
+      .catch(err => {
+        console.log(err);
+        M.toast({ html: "Error Ocurred" });
+      });
+
+      this.closeModal()
   };
 
   componentDidMount() {
@@ -60,18 +124,17 @@ class dashboard extends Component {
 
     var jwt = localStorage.getItem("jwt");
     var now = new Date();
-    console.log(now.getHours());
+    console.log(jwt);
 
-    // try {
-    //   var dashboard = jsonwebtoken.verify(jwt)
-    //   if(dashboard){
-    //     this.setState({logedin:true})
-    //   }
-    // } catch (error) {
-    //   this.setState({logedin:true})
-    //   console.log(error)
-
-    // }
+    try {
+      var dashboard = jsonwebtoken.verify(jwt, "authdemo");
+      if (dashboard) {
+        this.setState({ logedin: true });
+      }
+    } catch (error) {
+      this.props.history.push("/login");
+      console.log(error);
+    }
 
     var config = {
       headers: { authorization: jwt }
@@ -112,30 +175,61 @@ class dashboard extends Component {
   }
 
   render() {
-    if (this.state.logedin == true) {
-      var cndetailes = this.state.candidatedata;
-      var usrdetails = this.state.userdata;
-      return (
-        <div>
-          <Navbar />
-          <div class="row">
-          
-            <div className='maindash' />
-            <div className='container'>
-            <div className='greet'>
-            <h1>hello</h1>
+    var cndetailes = this.state.candidatedata;
+    var usrdetails = this.state.userdata;
+    return (
+      <div>
+        <Navbar />
+        <div class="row">
+          <div className="maindash" />
+
+          <a
+            onClick={this.openModal}
+            id="addbtn"
+            class="btn-floating btn-large light-blue darken-3 pulse"
+          >
+            <i class="fas fa-plus fa-3x" />
+          </a>
+          <Modal
+            isOpen={this.state.modalIsOpen}
+            onAfterOpen={this.afterOpenModal}
+            onRequestClose={this.closeModal}
+            style={customStyles}
+            contentLabel="Example Modal"
+          >
+            <h2 ref={subtitle => (this.subtitle = subtitle)}>Add Story</h2>
+
+            <form onSubmit={this.addpost}>
+              <div class="input-field col s12">
+                <textarea
+                  id="textarea1"
+                  onChange={this.changeHandlercontent}
+                  class="materialize-textarea"
+                />
+                <label for="textarea1">What's Happening ?</label>
+              </div>
+
+              <div className="submit">
+                <input
+                  type="submit"
+                  className="btn  waves-light light-blue darken-3"
+                  value="Post"
+                  id="submit"
+                />
+              </div>
+            </form>
+          </Modal>
+
+          <div className="container">
+            <div className="greet">
+              <h1>hello</h1>
             </div>
 
-            <CandidateCard name = 'rajitha'/>
-            
-            </div>
-            
+            <CandidateCard name="rajitha" />
           </div>
         </div>
-      );
-    } else {
-      return <Redirect to={`/login`} />;
-    }
+      </div>
+    );
   }
 }
 

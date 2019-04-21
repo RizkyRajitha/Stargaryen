@@ -13,6 +13,7 @@ import Dashboard from "./pages/dashboard/dashboard";
 import fogotpassword from "./pages/fogotpassword/fogotpassword";
 import resetpassword from "./pages/resetpassword/resetpassword";
 import emailconfirm from "./pages/emailverify/emailverify";
+import Mod from './pages/modal'
 
 import Userprofile from "./pages/userprofile/user";
 
@@ -29,8 +30,9 @@ class App extends Component {
         <Route path="/fogotpassword" component={fogotpassword} />
         <Route path="/resetpassword/:id" component={resetpassword} />
         <Route path="/confirmemail/:id" component={emailconfirm} />
+        <Route path="/confirmemail/:id" component={emailconfirm} />
 
-        <Route path="/user/:id" component={Userprofile} />
+        <Route path="/mod" component={Mod} />
       </BrowserRouter>
     );
   }
