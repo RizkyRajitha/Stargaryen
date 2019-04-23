@@ -1,17 +1,9 @@
 const mongoose = require("mongoose");
 const ObjectID = require("mongodb").ObjectID;
 
-
-
 var Schema = mongoose.Schema;
 
 var postSchema = new Schema({
-  postid: {
-    type: String,
-    unique: true,
-    required: true,
-    dropDups: true
-  },
   firstName: {
     type: String
   },
@@ -20,19 +12,20 @@ var postSchema = new Schema({
     type: String
   },
   date: {
-    type: String
+    type: String,
+    
   },
   up: {
-    type: Number
+    type: Number,
+    default:0
   },
-  down:{
-      type:Number
-  }
+  down: {
+    type: Number,
+    default:0
+  },upvoted:[],
+  downvoted:[]
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
 });
-
-
-
-
 
 const Post = mongoose.model("Post", postSchema);
 

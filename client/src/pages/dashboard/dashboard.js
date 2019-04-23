@@ -18,7 +18,8 @@ const customStyles = {
     right: "auto",
     bottom: "auto",
     marginRight: "-50%",
-    transform: "translate(-50%, -50%)"
+    transform: "translate(-50%, -50%)",
+    
   }
 };
 
@@ -37,7 +38,9 @@ class dashboard extends Component {
     content: "",
     usertype: "",
     emailverified: false,
-    modalIsOpen: false
+    modalIsOpen: false,
+    posts: null,    upvoted: [],
+    downvoted: []
   };
 
   openModal = () => {
@@ -51,6 +54,7 @@ class dashboard extends Component {
   afterOpenModal = () => {
     // references are now sync'd and can be accessed.
     this.subtitle.style.color = "#f00";
+    this.subtitle.style.textAlign = "center";
   };
 
   closeModal = () => {
@@ -67,10 +71,6 @@ class dashboard extends Component {
       .catch(err => {
         console.log(err);
       });
-  };
-
-  addpost = () => {
-    console.log("add");
   };
 
   greet = () => {
@@ -109,13 +109,37 @@ class dashboard extends Component {
       .then(res => {
         console.log(res);
         M.toast({ html: "Posted.." });
+        window.location.reload();
+        
       })
       .catch(err => {
         console.log(err);
         M.toast({ html: "Error Ocurred" });
       });
 
-      this.closeModal()
+    this.closeModal();
+  };
+
+  fetchPosts = () => {
+    var jwt = localStorage.getItem("jwt");
+    console.log(jwt);
+
+    var config = {
+      headers: { authorization: jwt }
+    };
+
+    axios
+      .get("/api/getposts", config)
+      .then(res => {
+        this.setState();
+        console.log(res.data);
+        this.setState({ posts: res.data });
+        
+      })
+      .catch(err => {
+        console.log(err);
+        M.toast({ html: "Error Ocurred" });
+      });
   };
 
   componentDidMount() {
@@ -135,6 +159,9 @@ class dashboard extends Component {
       this.props.history.push("/login");
       console.log(error);
     }
+   
+
+    this.fetchPosts();
 
     var config = {
       headers: { authorization: jwt }
@@ -152,8 +179,7 @@ class dashboard extends Component {
             emailverified: result.data.emailverified,
             id: result.data._id,
             firstName: result.data.firstName,
-            lastName: result.data.lastName,
-            usertype: result.data.usertype
+            lastName: result.data.lastName
           });
 
           this.setState({ logedin: true });
@@ -169,14 +195,14 @@ class dashboard extends Component {
         console.log("error" + err);
       });
 
-    setTimeout(() => {
-      console.log(this.state);
-    }, 1000);
+ 
+  
+    
+
   }
 
   render() {
-    var cndetailes = this.state.candidatedata;
-    var usrdetails = this.state.userdata;
+    var postsss = this.state.posts;
     return (
       <div>
         <Navbar />
@@ -206,7 +232,7 @@ class dashboard extends Component {
                   onChange={this.changeHandlercontent}
                   class="materialize-textarea"
                 />
-                <label for="textarea1">What's Happening ?</label>
+                <label id='postlable' for="textarea1">What's Happening ?</label>
               </div>
 
               <div className="submit">
@@ -222,10 +248,15 @@ class dashboard extends Component {
 
           <div className="container">
             <div className="greet">
-              <h1>hello</h1>
+              <h1>hello {this.state.firstName}</h1>
             </div>
 
             <CandidateCard name="rajitha" />
+
+            {postsss &&
+              postsss.reverse().map((ele, iis) => {
+                return <CandidateCard  upvotes={ele.up} downvotes={ele.down} name={ele.firstName} id={ele._id} content = {ele.content}/>;
+              })}
           </div>
         </div>
       </div>

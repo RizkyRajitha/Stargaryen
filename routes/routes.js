@@ -23,6 +23,10 @@ router.post("/signup", authRoutes.reg);
 router.post("/login", authRoutes.Login);
 router.get("/dashboard", userRoutes.dashboard);
 router.post('/addpost',userRoutes.addpost);
+router.get('/getposts',userRoutes.getposts);
+router.get('/getpost/:id',userRoutes.getpost);
+router.post('/upvote',userRoutes.upvote)
+router.post('/downvote',userRoutes.downvote)
 
 // router.get("/dashboard", (req, res, next) => {
 //   passport.authenticate(

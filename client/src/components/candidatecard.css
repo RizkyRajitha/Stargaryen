@@ -27,9 +27,10 @@
 }
 
 .votes{
+  /* width: 100px;
   margin-left: 90%;
   margin-bottom: 20px;
-  display: inline;
+  display: inline; */
 }
 
 #up{
@@ -38,4 +39,21 @@ margin-right: 30px;
 }
 #down{
   
+}
+
+.cardcontent{
+  font-size: 35px;
+}
+
+.cardheader{
+  margin-top: 5px;
+  margin-left: 20px;
+  text-align: left;
+
+}
+
+.counter{
+  /* margin-top: 80px;
+  width:100px;
+  text-align: left;                                                                                                                                                                                                                                                                                                                                                                                                                */
 }
