@@ -21,7 +21,7 @@ class fogotpassword extends Component {
     console.log("inform");
 
     axios
-      .post("/usr/fogotpassword", { email: this.state.email })
+      .post("/api/fogotpassword", { email: this.state.email })
       .then(res => {
         console.log(res);
         console.log(res.data);
@@ -41,19 +41,19 @@ class fogotpassword extends Component {
     if (this.state.errnotfound) {
       return (
         <div>
-          {" "}
+         
           <br />
           <h1> please check your email and try again </h1>
         </div>
       );
     } else if (this.state.succsee) {
-      // return (
-      //   <Alert color="primary" role="alert">
-      //     {" "}
-      //     <br />
-      //     <h1> reset link set to your email </h1>
-      //   </Alert>
-      // );
+      return (
+        <h1 color="primary" role="alert">
+          
+          <br />
+          <h1> reset link set to your email </h1>
+        </h1>
+      );
     } else {
       return (
         <div className="maindiv">
