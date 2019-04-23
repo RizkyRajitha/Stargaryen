@@ -12,7 +12,7 @@ const jsonwebtoken = require("jsonwebtoken");
 const customStyles = {
   content: {
     width: "50%",
-    height: "50%",
+    height: "40%",
     top: "50%",
     left: "50%",
     right: "auto",
@@ -138,7 +138,7 @@ class dashboard extends Component {
       })
       .catch(err => {
         console.log(err);
-        M.toast({ html: "Error Ocurred" });
+       // M.toast({ html: "Error Ocurred" });
       });
   };
 
@@ -158,6 +158,7 @@ class dashboard extends Component {
     } catch (error) {
       this.props.history.push("/login");
       console.log(error);
+      M.toast({html:"Session Expired"})
     }
    
 

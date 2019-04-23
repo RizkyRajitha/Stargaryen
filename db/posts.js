@@ -12,7 +12,7 @@ var postSchema = new Schema({
     type: String
   },
   date: {
-    type: String,
+    type: String,   
     
   },
   up: {

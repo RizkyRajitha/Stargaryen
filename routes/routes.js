@@ -27,6 +27,8 @@ router.get('/getposts',userRoutes.getposts);
 router.get('/getpost/:id',userRoutes.getpost);
 router.post('/upvote',userRoutes.upvote)
 router.post('/downvote',userRoutes.downvote)
+router.post("/fogotpassword", authRoutes.forgotpassword)
+router.post("/resetpassword/:id",authRoutes.resetpassword)
 
 // router.get("/dashboard", (req, res, next) => {
 //   passport.authenticate(
