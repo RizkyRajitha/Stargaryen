@@ -110,43 +110,40 @@ class CandidateCard extends Component {
               <div className="card-content">
                 <p className="cardcontent">{this.props.content}</p>
               </div>
-             
 
-              <div
- className='row'>
+              <div className="row" id='arrow'>
+                <div class="col s12 m4 l2">
+                  <div className="counter">
+                    upvotes:= {this.props.upvotes} <br />
+                    downvotes:= {this.props.downvotes}
+                  </div>
+                </div>
+                <div class="col s12 m4 l8">
+                
+                </div>
+                <div class="col s12 m4 l2">
+                  <div className="votes">
+                    <a>
+                      <i
+                        onClick={this.upvote}
+                        id="up"
+                        className="far fa-thumbs-up fa-2x"
+                      />
+                    </a>
+                    <a>
+                      <i
+                        onClick={this.downvote}
+                        id="down"
+                        class="far fa-thumbs-down fa-2x"
+                      />
+                    </a>
 
-<div className='col s6'>
-<div className="counter">
-                upvotes:= {this.props.upvotes} <br />
-                downvotes:= {this.props.downvotes}
+                    <a>
+                      <i class="fas fa-thumbs-up fa-2x" />
+                    </a>
+                  </div>
+                </div>
               </div>
-</div>
-
- <div className='col s6 offset-s6'>
- 
- <div className="votes">
-                <a>
-                  <i
-                    onClick={this.upvote}
-                    id="up"
-                    className="far fa-thumbs-up fa-2x"
-                  />
-                </a>
-                <a>
-                  <i
-                    onClick={this.downvote}
-                    id="down"
-                    class="far fa-thumbs-down fa-2x"
-                  />
-                </a>
-
-                <a>
-                  <i class="fas fa-thumbs-up fa-2x" />
-                </a>
-              </div>
- </div>
- 
- </div>              
             </div>
           </div>
         </div>

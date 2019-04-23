@@ -18,42 +18,42 @@
   left: 5%;
 } */
 
-
-.postcard{
+.postcard {
   align-items: center;
-  
-  text-align: center;
 
+  text-align: center;
 }
 
-.votes{
+.votes {
   /* width: 100px;
   margin-left: 90%;
   margin-bottom: 20px;
   display: inline; */
 }
 
-#up{
-margin-right: 30px;
-
+#up {
+  margin-right: 30px;
 }
-#down{
-  
+#down {
 }
 
-.cardcontent{
+.cardcontent {
   font-size: 35px;
 }
 
-.cardheader{
+.cardheader {
   margin-top: 5px;
   margin-left: 20px;
   text-align: left;
-
 }
 
-.counter{
+.counter {
   /* margin-top: 80px;
   width:100px;
   text-align: left;                                                                                                                                                                                                                                                                                                                                                                                                                */
+}
+
+#arrow {
+  margin-left: 0px;
+  margin-right: 0px;
 }
