@@ -19,10 +19,7 @@ app.use(bp.json());
 
 app.use("/usr", require("./routes/routes"));
 
-
 app.use(express.static("client/build"));
-
-const user = require("./db/users");
 
 try {
   mongoose.connect(mongodbAPI, { useNewUrlParser: true }, err => {
