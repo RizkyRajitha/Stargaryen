@@ -8,7 +8,8 @@ const port = process.env.PORT || 3001;
 
 mongoose.Promise = global.Promise;
 
-const mongodbAPI = "mongodb://127.0.0.1:27017/social" 
+const mongodbAPI = "mongodb://127.0.0.1:27017/social";
+
 const app = express();
 app.use(cors());
 app.use(require("morgan")("dev"));
@@ -17,7 +18,10 @@ app.use(bp.json());
 
 //const uu = require("./routes/userroute");
 
-app.use("/usr", require("./routes/routes"));
+app.use("/api", require("./routes/routes"));
+// app.get('/',(req,res)=>{
+//   res.send('works')
+// })
 
 app.use(express.static("client/build"));
 

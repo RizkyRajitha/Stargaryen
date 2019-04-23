@@ -1,0 +1,59 @@
+/* .badge {
+  text-align: right;
+  font-size: 20px;
+}
+#cancard {
+  background-color: #5f5454;
+}
+
+.divecancard {
+  position: absolute;
+  top: 14%;
+  left: 5%;
+}
+
+#checkbox {
+  text-align: right;
+  font-size: 20px;
+  left: 5%;
+} */
+
+
+.postcard{
+  align-items: center;
+  
+  text-align: center;
+
+}
+
+.votes{
+  /* width: 100px;
+  margin-left: 90%;
+  margin-bottom: 20px;
+  display: inline; */
+}
+
+#up{
+margin-right: 30px;
+
+}
+#down{
+  
+}
+
+.cardcontent{
+  font-size: 35px;
+}
+
+.cardheader{
+  margin-top: 5px;
+  margin-left: 20px;
+  text-align: left;
+
+}
+
+.counter{
+  /* margin-top: 80px;
+  width:100px;
+  text-align: left;                                                                                                                                                                                                                                                                                                                                                                                                                */
+}

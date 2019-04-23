@@ -3,7 +3,6 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const ObjectID = require("mongodb").ObjectID;
 
-
 saltRounds = 10;
 
 var Schema = mongoose.Schema;
@@ -15,14 +14,13 @@ var userSchema = new Schema({
     required: true,
     dropDups: true
   },
-  firstName: { 
-    type: String 
+  firstName: {
+    type: String
   },
 
   lastName: {
-     type: String 
-    }
-     ,
+    type: String
+  },
   hash: {
     type: String
   },
@@ -31,7 +29,6 @@ var userSchema = new Schema({
   }
 });
 
-
 userSchema.methods.verifypass = function(password) {
   console.log("very pass - " + this.email + "\n hash - " + this.hash);
   const sts = bcrypt.compareSync(password, this.hash);
@@ -39,25 +36,21 @@ userSchema.methods.verifypass = function(password) {
   return sts;
 };
 
-userSchema.statics.getUserByToken = function(token){
-    console.log('inside get token')
+userSchema.statics.getUserByToken = function(token) {
+  console.log("inside get token");
 
-    try {
-        
-    var data = jwt.verify(token,'authdemo')
-        this.findById(ObjectID(data.id)).then(res=>{
-            console.log(res)
-            if(res){
-                return true
-            }
-        })
+  try {
+    var data = jwt.verify(token, "authdemo");
+    console.log("decode data " + data.id);
+    var User = this;
 
-    } catch (error) {
-        console.log(error)
-        return false
-    }
-}
-
+    return User.findOne({ _id: data.id });
+  } catch (error) {
+    return new Promise((resolve,reject)=>{
+      reject(error)
+    })
+  }
+};
 
 userSchema.methods.generateJWT = function() {
   console.log("inside genJWT");
@@ -73,7 +66,6 @@ userSchema.methods.generateJWT = function() {
     { expiresIn: "10m" }
   );
 };
-
 
 const User = mongoose.model("User", userSchema);
 
