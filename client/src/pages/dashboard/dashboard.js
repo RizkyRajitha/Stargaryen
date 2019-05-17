@@ -7,28 +7,41 @@ import Navbar from "../../components/navbar_metcss";
 import axios from "axios";
 import Modal from "react-modal";
 import M from "materialize-css";
+import io from "socket.io-client";
+//import { upvote } from "../../../../api/routes/user.routes";
 const jsonwebtoken = require("jsonwebtoken");
 
 const customStyles = {
   content: {
     width: "50%",
-    height: "40%",
+    height: "50%",
     top: "50%",
     left: "50%",
     right: "auto",
     bottom: "auto",
     marginRight: "-50%",
-    transform: "translate(-50%, -50%)",
-    
+    transform: "translate(-50%, -50%)"
   }
 };
 
 //import { CandidateCard } from "./CandidateCard";
 // const request = require("request");
+const socket = io("http://127.0.0.1:3001", {
+  transports: ["websocket"],
+  upgrade: false
+});
+
+//"up":0,"down":0,"upvoted":[],"downvoted":[],"_id":"5cdc55822f24c95dec2e45d4","firstName":"Dewindi","content":"aaa","date":"Wed May 15 2019 23:38:02 GMT+0530 (+0530)","__v":0}
 
 Modal.setAppElement("#root");
-
 class dashboard extends Component {
+  constructor(props) {
+    super(props);
+    //this.upvoteprop = this.upvoteprop.bind(this);
+   
+  }
+ 
+
   state = {
     logedin: true,
     email: "",
@@ -39,7 +52,8 @@ class dashboard extends Component {
     usertype: "",
     emailverified: false,
     modalIsOpen: false,
-    posts: null,    upvoted: [],
+    posts: [],
+    upvoted: [],
     downvoted: []
   };
 
@@ -88,6 +102,13 @@ class dashboard extends Component {
     }
   };
 
+  upvoteprop = postid => {
+    var jwt = localStorage.getItem("jwt");
+    var upvotedta = { postid: postid, jwt: jwt };
+    console.log("upvotedata - " + JSON.stringify(upvotedta));
+    socket.emit("newupvote", upvotedta);
+  };
+
   addpost = e => {
     e.preventDefault();
     console.log(this.state);
@@ -101,21 +122,16 @@ class dashboard extends Component {
 
     var senddata = {
       firstName: this.state.firstName,
-      content: this.state.content
+      content: this.state.content,
+      jwt: jwt
     };
 
-    axios
-      .post("/api/addpost", senddata, config)
-      .then(res => {
-        console.log(res);
-        M.toast({ html: "Posted.." });
-        window.location.reload();
-        
-      })
-      .catch(err => {
-        console.log(err);
-        M.toast({ html: "Error Ocurred" });
-      });
+    socket.emit("newpost", senddata); //newposterror
+
+    socket.on("newposterror", err => {
+      M.toast({ html: "Error Ocurred" });
+      console.log("error post emit fired " + err);
+    });
 
     this.closeModal();
   };
@@ -134,18 +150,16 @@ class dashboard extends Component {
         this.setState();
         console.log(res.data);
         this.setState({ posts: res.data });
-        
       })
       .catch(err => {
         console.log(err);
-       // M.toast({ html: "Error Ocurred" });
+        // M.toast({ html: "Error Ocurred" });
       });
   };
 
   componentDidMount() {
     this.greet();
     console.log("mount");
-
     var jwt = localStorage.getItem("jwt");
     var now = new Date();
     console.log(jwt);
@@ -158,11 +172,58 @@ class dashboard extends Component {
     } catch (error) {
       this.props.history.push("/login");
       console.log(error);
-      M.toast({html:"Session Expired"})
+      M.toast({ html: "Session Expired" });
     }
-   
 
     this.fetchPosts();
+
+    socket.on("newpost", newpost => {
+      var preposts = this.state.posts;
+
+      console.log(
+        "added new post somewhere - 0=================" +
+          JSON.stringify(newpost)
+      );
+
+      // this.setState(prevState => {
+      //   const postszzz = [newpost, ...prevState.posts];
+      //   console.log("set state = " + postszzz);
+      //   return {postszzz}
+      // });
+
+       preposts.unshift(newpost);
+       this.setState({ posts: preposts });
+      console.log(this.state.posts);
+    });
+
+    socket.on("newupvote", upvotedata => {
+      console.log("someone upvoted" + JSON.stringify(upvotedata));
+
+      var postarr = this.state.posts;
+      console.log("post arr - " + postarr.length);
+      for (var i = 0; i < postarr.length; i++) {
+        //console.log("postszz - " + JSON.stringify(postarr[i]));
+        if (postarr[i]._id === upvotedata.postid) {
+          postarr[i] = upvotedata.updatepost;
+          //postarr.splice(i, 1)
+          // console.log("aha  - "+JSON.stringify(postarr));
+        }
+      }
+
+      //postarr.push(upvotedata.updatepost)
+      setTimeout(() => {
+        console.log(this.state.posts);
+      }, 1000);
+      this.setState({ posts: postarr });
+    }); //newupvoteerror
+    socket.on("newupvoteerror", err => {
+      console.log("error upvoted" + JSON.stringify(err));
+      if (err.content === "cannot_upvote_twice") {
+        M.toast({ html: "Cannot upvote an upvoted post" });
+      }
+    });
+
+    //socket.emit("newpost", "sasasasasasas/////////////*qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq");
 
     var config = {
       headers: { authorization: jwt }
@@ -195,15 +256,20 @@ class dashboard extends Component {
         this.setState({ logedin: false });
         console.log("error" + err);
       });
-
- 
-  
-    
-
   }
 
   render() {
-    var postsss = this.state.posts;
+    //var postsss = this.state.posts;
+
+    //     socket.on("newpost", newpost => {
+    //       var preposts = this.state.posts;
+
+    // console.log("added new post somewhere - 0=================")
+
+    //       preposts.push({ name: newpost.firstName, content: newpost.content });
+    //       this.setState({ posts: preposts });
+    //     });
+
     return (
       <div>
         <Navbar />
@@ -233,7 +299,9 @@ class dashboard extends Component {
                   onChange={this.changeHandlercontent}
                   class="materialize-textarea"
                 />
-                <label id='postlable' for="textarea1">What's Happening ?</label>
+                <label id="postlable" for="textarea1">
+                  What's Happening ?
+                </label>
               </div>
 
               <div className="submit">
@@ -252,12 +320,36 @@ class dashboard extends Component {
               <h1>hello {this.state.firstName}</h1>
             </div>
 
-            <CandidateCard name="rajitha" />
+            {this.state.posts.map(function(ele, i) {
+              console.log("test");
+              return (
+                <CandidateCard
+                  key={i}
+                  upvotescount={ele.up}
+                  name={ele.firstName}
+                  id={ele._id}
+                  content={ele.content}
+                  upvote={this.upvoteprop}
+                  time={ele.date}
+                  thisUserUpVoted={ele.thisUserUpVoted}
+                />
+              );
+            }.bind(this))}
 
-            {postsss &&
-              postsss.reverse().map((ele, iis) => {
-                return <CandidateCard  upvotes={ele.up} downvotes={ele.down} name={ele.firstName} id={ele._id} content = {ele.content}/>;
-              })}
+            {/* {postsss &&
+              postsss.map((ele, iis) => {
+                return (
+                  <CandidateCard
+                    upvotescount={ele.up}
+                    name={ele.firstName}
+                    id={ele._id}
+                    content={ele.content}
+                    upvote={this.upvoteprop}
+                    time = {ele.date}
+                    thisUserUpVoted = {ele.thisUserUpVoted}
+                  />
+                );
+              })} */}
           </div>
         </div>
       </div>

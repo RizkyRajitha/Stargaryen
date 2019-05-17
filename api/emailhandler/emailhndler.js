@@ -1,5 +1,5 @@
 var nodemailer = require("nodemailer");
-const config = require("../config/keys");
+//const config = require("../config/keys");
 var jwt= require('jsonwebtoken')
 
 const passwordResetApi = "http://localhost:3000/resetpassword";
@@ -9,7 +9,7 @@ var transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
     user: "kithminiatdev@gmail.com",
-    pass:   config.config.mailapppass
+    pass:   ""//config.config.mailapppass
   }
 });
 

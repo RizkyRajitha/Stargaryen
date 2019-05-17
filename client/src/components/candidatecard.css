@@ -20,19 +20,22 @@
 
 .postcard {
   align-items: center;
-
+  /* color:#ffffff;
+  background-color: #222222; */
   text-align: center;
 }
 
 .votes {
-  /* width: 100px;
-  margin-left: 90%;
+  width: 100px;
+  margin-left: 85%;
   margin-bottom: 20px;
-  display: inline; */
+  
 }
-
+.upvotecount{
+  padding: 10px;
+}
 #up {
-  margin-right: 30px;
+  margin-top: 0px;
 }
 #down {
 }

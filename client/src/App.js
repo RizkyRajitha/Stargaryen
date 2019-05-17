@@ -22,7 +22,8 @@ import { BrowserRouter, Route } from "react-router-dom";
 class App extends Component {
   render() {
     return (
-      <BrowserRouter>
+      <BrowserRouter  >
+
         <Route exact path="/" component={Login} />
         <Route path="/dashboard" component={Dashboard} />
         <Route path="/signup" component={Register} />

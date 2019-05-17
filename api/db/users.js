@@ -63,7 +63,7 @@ userSchema.methods.generateJWT = function() {
       id: this._id
     },
     "authdemo",
-    { expiresIn: "10m" }
+    { expiresIn: "36000m" }
   );
 };
 

@@ -1,12 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const User = require("../db/users");
-//const Candidate = require("../db/candidates");
+
 const ObjectID = require("mongodb").ObjectID;
-//require("../config/passport");
-//const emailhandler = require("../config/emailhandler");
 const path = require("path");
-//const Evaluation = require("../db/evaluation");
 const authRoutes = require("./auth.routes");
 const userRoutes = require("./user.routes");
 
@@ -30,38 +27,7 @@ router.post('/downvote',userRoutes.downvote)
 router.post("/fogotpassword", authRoutes.forgotpassword)
 router.post("/resetpassword/:id",authRoutes.resetpassword)
 
-// router.get("/dashboard", (req, res, next) => {
-//   passport.authenticate(
-//     "jwtstrategy",
-//     { session: false },
-//     (err, user, info) => {
-//       console.log("error - " + err);
-//       console.log("user - " + user);
-//       console.log("info -- " + info);
 
-//       if (!user) {
-//         res.status(401).send(info);
-//       } else {
-//         User.findById(ObjectID(user.id))
-//           .then(result => {
-//             const senddata = {
-//               id: result._id,
-//               email: result.email,
-//               emailverified: result.emailverified,
-//               firstName: result.firstName,
-//               lastName: result.lastName,
-//               usertype:result.usertype
-//             };
-//             console.log(senddata);
-//             res.status(200).json(senddata);
-//           })
-//           .catch(err => {
-//             res.status(403).json(err);
-//           });
-//       }
-//     }
-//   )(req, res, next);
-// });
 
 router.post("/sendconfirmemail/:id", (req, res) => {
   console.log(req.params.id);

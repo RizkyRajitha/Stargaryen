@@ -23,7 +23,8 @@ var postSchema = new Schema({
     type: Number,
     default:0
   },upvoted:[],
-  downvoted:[]
+  downvoted:[],
+  thisUserUpVoted:{type:Boolean,default:false}
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
 });
 

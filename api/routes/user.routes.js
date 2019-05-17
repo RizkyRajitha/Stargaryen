@@ -30,30 +30,30 @@ exports.addpost = (req, res) => {
 
   console.log(req.body);
 
-  User.getUserByToken(req.headers.authorization)
-    .then(doc => {
-      console.log(doc);
+  // User.getUserByToken(req.headers.authorization)
+  //   .then(doc => {
+  //     console.log(doc);
 
-      var newpost = new Posts({
-        firstName: req.body.firstName,
-        content: req.body.content,
-        date: new Date()
-      });
+  //     var newpost = new Posts({
+  //       firstName: req.body.firstName,
+  //       content: req.body.content,
+  //       date: new Date()
+  //     });
 
-      newpost
-        .save()
-        .then(data => {
-          res.status(200).send(data);
-        })
-        .catch(err => {
-          console.log(err);
-          res.status(400).send(err);
-        });
-    })
-    .catch(err => {
-      console.log(err);
-      res.status(401).send(err);
-    });
+  //     newpost
+  //       .save()
+  //       .then(data => {
+  //         res.status(200).send(data);
+  //       })
+  //       .catch(err => {
+  //         console.log(err);
+  //         res.status(400).send(err);
+  //       });
+  //   })
+  //   .catch(err => {
+  //     console.log(err);
+  //     res.status(401).send(err);
+  //   });
 };
 
 exports.upvote = (req, res) => {
@@ -137,11 +137,41 @@ exports.downvote = (req, res) => {
 };
 
 exports.getposts = (req, res) => {
+  console.log("in getposts");
+
   User.getUserByToken(req.headers.authorization)
     .then(doc => {
-      Posts.find()
+      Posts.find().sort({date:-1})
         .then(postsData => {
-          res.status(200).json(postsData);
+          console.log("post data array - ");
+          var payload = [];
+          for (var i = 0; i < postsData.length; i++) {
+            var objDoc = postsData[i].toObject();
+            console.log("up - " + objDoc.upvoted + " userid - " + doc._id);
+            if (postsData[i].upvoted.includes(doc._id)) {
+              console.log("true");
+              objDoc.thisUserUpVoted = true;
+            } else {
+              console.log("false");
+              objDoc.thisUserUpVoted = false;
+            }
+            payload.push(objDoc);
+            console.log("temp payload - " + JSON.stringify(objDoc));
+          }
+
+          //   console.log("up - "+element.upvoted+" userid - "+doc._id)
+
+          // if(element.upvoted.includes(doc._id)){
+          //   console.log('true')
+          //   element.thisUserUpVoted = true;
+          // }else{
+          //   element.thisUserUpVoted = false
+
+          //   }
+
+          //console.log("send - "+JSON.stringify(postsData[0]))
+
+          res.status(200).json(payload);
         })
         .catch(err => {
           res.status(304).json(err);
