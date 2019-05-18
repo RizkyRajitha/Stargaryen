@@ -16,18 +16,18 @@ class resetpassword extends Component {
   };
 
   componentDidMount() {
-    // try {
-    //   const iid = jwt.verify(this.props.match.params.id, "authdemo");
-    //   console.log(iid.id);
-    //   console.log(iid.id);
-    //   this.setState({ id: iid.id });
-    // } catch (error) {
-    //   this.setState({ exp: true });
-    //   console.log(error);
-    //   setTimeout(() => {
-    //     this.props.history.push("/login");
-    //   }, 2000);
-    // }
+    try {
+      const iid = jwt.verify(this.props.match.params.id, "authdemo");
+      console.log(iid.id);
+      console.log(iid.id);
+      this.setState({ id: iid.id });
+    } catch (error) {
+      this.setState({ exp: true });
+      console.log(error);
+      setTimeout(() => {
+        this.props.history.push("/login");
+      }, 2000);
+    }
   }
 
   changeHandler = e => {

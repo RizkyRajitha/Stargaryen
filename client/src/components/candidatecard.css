@@ -29,9 +29,8 @@
   width: 100px;
   margin-left: 85%;
   margin-bottom: 20px;
-  
 }
-.upvotecount{
+.upvotecount {
   padding: 10px;
 }
 #up {
@@ -59,4 +58,8 @@
 #arrow {
   margin-left: 0px;
   margin-right: 0px;
+}
+
+.fromnow {
+  font-size: 15px;
 }

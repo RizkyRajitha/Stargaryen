@@ -9,7 +9,7 @@ var transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
     user: "kithminiatdev@gmail.com",
-    pass:   ""//config.config.mailapppass
+    pass:   process.env.emailcred//config.config.mailapppass
   }
 });
 
@@ -25,7 +25,7 @@ exports.mailhandlerpasswordreset = (email, id,firstname,lastname) => {
 
   var mailOptions = {
     from: "kithminiatdev@gmail.com",
-    to: "rajithagunathilake@gmail.com",
+    to: email,
     subject: "password reset",
     text: "visit - ",
     html: `<h2>  hello ${firstname} ${lastname}  <br>  </h2><h1> please visit -${passwordResetApi}/${token}  to reset your password </h1>`
@@ -52,7 +52,7 @@ exports.mailhandleremailconfirm = (email, id,firstname,lastname) => {
   console.log("sending confirm email ............");
   var mailOptions = {
     from: "kithminiatdev@gmail.com",
-    to: "rajithagunathilake@gmail.com",
+    to: email,
     subject: "email confirmation",
     text: "visit - ",
     html: `<h2>  hello ${firstname} ${lastname}  <br>  </h2><h1> please visit -${emailConfirmApi}/${token}  to confirm your email </h1>`

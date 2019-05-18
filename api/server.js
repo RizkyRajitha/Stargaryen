@@ -10,10 +10,11 @@ const User = require("./db/users");
 const ObjectID = require("mongodb").ObjectID;
 const Posts = require("./db/posts");
 const port = process.env.PORT || 3001;
+const path = require("path");
 
 mongoose.Promise = global.Promise;
 
-const mongodbAPI = "mongodb://127.0.0.1:27017/social";
+const mongodbAPI =process.env.MONGOAPI || "mongodb://127.0.0.1:27017/social" //"mongodb://rizkyrajitha:fariz123123@ds149056.mlab.com:49056/stargaryen"//"mongodb://rizkyrajitha:fariz123123@ds159217.mlab.com:59217/socialapp"; //"mongodb://127.0.0.1:27017/social";
 
 app.use(cors());
 app.use(require("morgan")("dev"));
@@ -27,17 +28,17 @@ app.use("/api", require("./routes/routes"));
 //   res.send('works')
 // })
 
-// app.use(express.static("../client/build"));
-// app.get("*", (req, res) => {
-//   res.sendFile(path.resolve(__dirname,'../', "client", "build", "index.html"));
-// });
+app.use(express.static("../client/build"));
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "../", "client", "build", "index.html"));
+});
 
 try {
   mongoose.connect(mongodbAPI, { useNewUrlParser: true }, err => {
     if (!err) console.log("connected to mongodb sucsessfully" + "👍");
   });
 } catch (error) {
-  console.log(err);
+  console.log(error);
 }
 
 mongoose.set("debug", true);
@@ -94,13 +95,15 @@ io.on("connection", sock => {
               onepost
                 .save()
                 .then(savepost => {
-                  console.log('saved upvoted post - '+JSON.stringify(savepost));
+                  console.log(
+                    "saved upvoted post - " + JSON.stringify(savepost)
+                  );
                   sock.broadcast.emit("newupvote", {
                     msg: "sucsess",
                     postid: msg.postid,
-                    updatepost:savepost,
-                    userId:doc._id,
-                    name:doc.firstName+" "+doc.lastName
+                    updatepost: savepost,
+                    userId: doc._id,
+                    name: doc.firstName + " " + doc.lastName
                   });
                   //res.status(200).json();
                 })

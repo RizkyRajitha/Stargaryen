@@ -13,17 +13,16 @@ import Dashboard from "./pages/dashboard/dashboard";
 import fogotpassword from "./pages/fogotpassword/fogotpassword";
 import resetpassword from "./pages/resetpassword/resetpassword";
 import emailconfirm from "./pages/emailverify/emailverify";
-import Mod from './pages/modal'
+import Mod from "./pages/modal";
 
 import Userprofile from "./pages/userprofile/user";
 
-import { BrowserRouter, Route } from "react-router-dom";
+import { BrowserRouter, Route, HashRouter } from "react-router-dom";
 
 class App extends Component {
   render() {
     return (
-      <BrowserRouter  >
-
+      <BrowserRouter>
         <Route exact path="/" component={Login} />
         <Route path="/dashboard" component={Dashboard} />
         <Route path="/signup" component={Register} />
