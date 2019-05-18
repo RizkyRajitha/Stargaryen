@@ -25,9 +25,9 @@ class CandidateCard extends Component {
 
       this.props.upvote(this.props.id);
     } else {
-      this.setState({
-        thumbsicon: false
-      });
+      // this.setState({
+      //   thumbsicon: false
+      // });
     }
 
     // if (this.state.upvotesnow >= this.state.upvotesbegin + 1) {
@@ -53,38 +53,34 @@ class CandidateCard extends Component {
     // }
   };
 
+  // componentDidMount() {
+  //   //this.setState({ upvotecount: this.props.upvotescount });
+  //   console.log(
+  //     "time i got in can card - " +
+  //       this.props.time.slice(4, 24) +
+  //       "pro - " +
+  //       JSON.stringify(this.props)
+  //   );
+  //   // const dote = new Date(this.props.time)
+  //   // console.log(dote.toTimeString)
+  //   //Tue Apr 23 2019 12:21:53 GMT+0530 (+0530)
+  //   var s = this.props.time.slice(4, 24); //"2019-04-24 18:00:00";  // from action.timeStamp
 
+  //   //var actionTime = moment(s , "YYYY-MM-DD HH:mm:ssZ");
+  //   var actionTime = moment(s, "MMM-DD-YYYY HH:mm:ssZ");
+  //   var timeAgo = actionTime.fromNow();
 
+  //   console.log(timeAgo);
 
-  componentDidMount() {
-    //this.setState({ upvotecount: this.props.upvotescount });
-    console.log('time i got in can card - '+this.props.time.slice(4, 24)+"pro - "+JSON.stringify(this.props));
-    // const dote = new Date(this.props.time)
-    // console.log(dote.toTimeString)
-    //Tue Apr 23 2019 12:21:53 GMT+0530 (+0530)
-    var s = this.props.time.slice(4, 24); //"2019-04-24 18:00:00";  // from action.timeStamp
+  //   this.setState({ fromNow: timeAgo });
 
-    //var actionTime = moment(s , "YYYY-MM-DD HH:mm:ssZ");
-    var actionTime = moment(s, "MMM-DD-YYYY HH:mm:ssZ");
-    var timeAgo = actionTime.fromNow();
+  //   console.log("upvoide count - " + this.props.upvotescount);
+  //   console.log(this.props);
 
-    console.log(timeAgo);
-
-    this.setState({ fromNow: timeAgo });
-    
-    console.log("upvoide count - " + this.props.upvotescount);
-    console.log(this.props);
-    if (this.props.thisUserUpVoted === true) {
-      this.setState({
-        thumbsicon: true
-      });
-    }
-    else{
-      this.setState({
-        thumbsicon: false
-      });
-    }
-  }
+  //   // this.setState({
+  //   //   thumbsicon: this.props.thisUserUpVoted
+  //   // })
+  // }
 
   render() {
     if (this.props.time) {
@@ -93,7 +89,6 @@ class CandidateCard extends Component {
       //var actionTime = moment(s , "YYYY-MM-DD HH:mm:ssZ");
       var actionTime = moment(s, "MMM-DD-YYYY HH:mm:ssZ");
       var timeAgo = actionTime.fromNow();
-  
     }
 
     return (
@@ -101,7 +96,9 @@ class CandidateCard extends Component {
         <div>
           <div className="card horizontal">
             <div className="card-stacked">
-              <h4 className="cardheader">{this.props.name} <span className='fromnow'>{timeAgo}</span>                    </h4>
+              <h4 className="cardheader">
+                {this.props.name} <span className="fromnow">{timeAgo}</span>{" "}
+              </h4>
               <div className="card-content">
                 <p className="cardcontent">{this.props.content}</p>
               </div>
@@ -111,14 +108,14 @@ class CandidateCard extends Component {
                 <div className="votes">
                   <span className="upvotecount">{this.props.upvotescount}</span>
 
-                  <a hidden={this.state.thumbsicon}>
+                  <a hidden={this.props.thisUserUpVoted}>
                     <i
                       onClick={this.upvote}
                       id="up"
                       className="far fa-thumbs-up fa-2x"
                     />
                   </a>
-                  <a hidden={!this.state.thumbsicon}>
+                  <a hidden={!this.props.thisUserUpVoted}>
                     <i
                       class="fas fa-thumbs-up fa-2x"
                       onClick={this.upvote}

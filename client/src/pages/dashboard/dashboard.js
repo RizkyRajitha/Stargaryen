@@ -38,9 +38,7 @@ class dashboard extends Component {
   constructor(props) {
     super(props);
     //this.upvoteprop = this.upvoteprop.bind(this);
-   
   }
- 
 
   state = {
     logedin: true,
@@ -103,10 +101,22 @@ class dashboard extends Component {
   };
 
   upvoteprop = postid => {
+    console.log("only i upvoted post");
     var jwt = localStorage.getItem("jwt");
     var upvotedta = { postid: postid, jwt: jwt };
-    console.log("upvotedata - " + JSON.stringify(upvotedta));
+
+    var postarr = this.state.posts;
+
+    for (var i = 0; i < postarr.length; i++) {
+      if (postarr[i]._id === postid) {
+        postarr[i].thisUserUpVoted = true;
+        postarr[i].up = postarr[i].up + 1;
+        break;
+      }
+    }
+
     socket.emit("newupvote", upvotedta);
+    this.setState({ posts: postarr });
   };
 
   addpost = e => {
@@ -191,31 +201,37 @@ class dashboard extends Component {
       //   return {postszzz}
       // });
 
-       preposts.unshift(newpost);
-       this.setState({ posts: preposts });
+      preposts.unshift(newpost);
+      this.setState({ posts: preposts });
       console.log(this.state.posts);
     });
 
     socket.on("newupvote", upvotedata => {
       console.log("someone upvoted" + JSON.stringify(upvotedata));
 
-      var postarr = this.state.posts;
-      console.log("post arr - " + postarr.length);
-      for (var i = 0; i < postarr.length; i++) {
-        //console.log("postszz - " + JSON.stringify(postarr[i]));
-        if (postarr[i]._id === upvotedata.postid) {
-          postarr[i] = upvotedata.updatepost;
-          //postarr.splice(i, 1)
-          // console.log("aha  - "+JSON.stringify(postarr));
-        }
-      }
+      const userId = localStorage.getItem("userId");
 
+      if (userId != upvotedata.userId) {
+        M.toast({ html: upvotedata.name + " upvoted a post just now " });
+        var postarr = this.state.posts;
+        console.log("post arr - " + postarr.length);
+        for (var i = 0; i < postarr.length; i++) {
+          //console.log("postszz - " + JSON.stringify(postarr[i]));
+          if (postarr[i]._id === upvotedata.postid) {
+            postarr[i].up = upvotedata.updatepost.up;
+            //postarr.splice(i, 1)
+            // console.log("aha  - "+JSON.stringify(postarr));
+          }
+          this.setState({ posts: postarr });
+        }
+      } else {
+      }
       //postarr.push(upvotedata.updatepost)
       setTimeout(() => {
         console.log(this.state.posts);
       }, 1000);
-      this.setState({ posts: postarr });
     }); //newupvoteerror
+
     socket.on("newupvoteerror", err => {
       console.log("error upvoted" + JSON.stringify(err));
       if (err.content === "cannot_upvote_twice") {
@@ -320,21 +336,23 @@ class dashboard extends Component {
               <h1>hello {this.state.firstName}</h1>
             </div>
 
-            {this.state.posts.map(function(ele, i) {
-              console.log("test");
-              return (
-                <CandidateCard
-                  key={i}
-                  upvotescount={ele.up}
-                  name={ele.firstName}
-                  id={ele._id}
-                  content={ele.content}
-                  upvote={this.upvoteprop}
-                  time={ele.date}
-                  thisUserUpVoted={ele.thisUserUpVoted}
-                />
-              );
-            }.bind(this))}
+            {this.state.posts.map(
+              function(ele, i) {
+                console.log("test");
+                return (
+                  <CandidateCard
+                    key={i}
+                    upvotescount={ele.up}
+                    name={ele.firstName}
+                    id={ele._id}
+                    content={ele.content}
+                    upvote={this.upvoteprop}
+                    time={ele.date}
+                    thisUserUpVoted={ele.thisUserUpVoted}
+                  />
+                );
+              }.bind(this)
+            )}
 
             {/* {postsss &&
               postsss.map((ele, iis) => {

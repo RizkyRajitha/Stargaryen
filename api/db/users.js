@@ -70,3 +70,30 @@ userSchema.methods.generateJWT = function() {
 const User = mongoose.model("User", userSchema);
 
 module.exports = User;
+
+
+/**    socket.on("newupvote", upvotedata => {
+      console.log("someone upvoted" + JSON.stringify(upvotedata));
+
+      var postarr = this.state.posts;
+      console.log("post arr - " + postarr.length);
+      for (var i = 0; i < postarr.length; i++) {
+        //console.log("postszz - " + JSON.stringify(postarr[i]));
+        if (postarr[i]._id === upvotedata.postid) {
+          postarr[i] = upvotedata.updatepost;
+          //postarr.splice(i, 1)
+          // console.log("aha  - "+JSON.stringify(postarr));
+        }
+      }
+
+      const userId = localStorage.getItem("userId");
+
+      if (userId != upvotedata.userId) {
+        M.toast({ html: upvotedata.name + " upvoted a post just now " });
+      }
+      //postarr.push(upvotedata.updatepost)
+      setTimeout(() => {
+        console.log(this.state.posts);
+      }, 1000);
+      this.setState({ posts: postarr });
+    }); */

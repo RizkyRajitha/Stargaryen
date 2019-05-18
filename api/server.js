@@ -95,10 +95,12 @@ io.on("connection", sock => {
                 .save()
                 .then(savepost => {
                   console.log('saved upvoted post - '+JSON.stringify(savepost));
-                  io.emit("newupvote", {
+                  sock.broadcast.emit("newupvote", {
                     msg: "sucsess",
                     postid: msg.postid,
-                    updatepost:savepost
+                    updatepost:savepost,
+                    userId:doc._id,
+                    name:doc.firstName+" "+doc.lastName
                   });
                   //res.status(200).json();
                 })
